@@ -252,10 +252,10 @@ public class HomeFurnitureController implements Controller {
       }
       setPaint(null);
       setShininess(null);
-      this.visibleEditable = false;
+      this.visibleEditable = true;
       setVisible(null);
       setModelMirrored(null);
-      this.lightPowerEditable = false;
+      this.lightPowerEditable = true;
       setLightPower(null);
       setResizable(true);
       setDeformable(true);
@@ -596,6 +596,7 @@ public class HomeFurnitureController implements Controller {
   public boolean isPropertyEditable(Property property) {
     switch (property) {
       case DESCRIPTION :
+        return true;
       case PRICE :
         return false;
       case LIGHT_POWER :
