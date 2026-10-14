@@ -349,8 +349,8 @@ public class CatalogPieceOfFurniture implements Comparable<CatalogPieceOfFurnitu
                                  float [][] modelRotation, String creator, 
                                  boolean resizable, boolean deformable, boolean texturable, 
                                  BigDecimal price, BigDecimal valueAddedTaxPercentage, String currency) {
-    this(id, name, description, information, tags, creationDate, grade, icon, planIcon, model, width, depth, height, 
-        elevation, dropOnTopElevation, movable, staircaseCutOutShape, modelRotation, false, 
+    this(id, name, description, information, tags, creationDate, grade, icon, planIcon, model, width, depth, height,
+        elevation, dropOnTopElevation, movable, staircaseCutOutShape, modelRotation, false,
         creator, resizable, deformable, texturable, price, valueAddedTaxPercentage, currency);
   }
   
@@ -592,6 +592,10 @@ public class CatalogPieceOfFurniture implements Comparable<CatalogPieceOfFurnitu
    */
   public float getDepth() {
     return this.depth;
+  }
+
+  public float getVolume() {
+    return this.depth * this.height * this.width;
   }
 
   /**
