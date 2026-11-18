@@ -37,11 +37,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.security.AccessControlException;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -358,7 +354,6 @@ public class HomePrintableComponent extends JComponent implements Printable {
             public boolean include(Home home, HomePieceOfFurniture piece) {
               // Print only furniture at selected level when the plan or the 3D view is printed
               return (furnitureFilter == null || furnitureFilter.include(home, piece))
-                  && piece.isAtLevel(selectedLevel)
                   && (piece.getLevel() == null || piece.getLevel().isViewable());
             }
           });
@@ -380,8 +375,19 @@ public class HomePrintableComponent extends JComponent implements Printable {
     if (pageExists == NO_SUCH_PAGE 
         && planView != null 
         && (homePrint == null || homePrint.isPlanPrinted())) {
+      Level originalLevel = home.getSelectedLevel();
+      List<Level> viewableLevels = new ArrayList<Level>();
+
+      for (Level level : home.getLevels()) {
+        if (level.isViewable()) {
+          viewableLevels.add(level);
+        }
+      }
+      int planPageIndex = page - this.furniturePageCount;
+      if (planPageIndex >= 0 && planPageIndex < viewableLevels.size()) {
+          pageExists = ((Printable)planView).print(g2D, pageFormat, planPageIndex);
+      }
       // Try to print next plan view page
-      pageExists = ((Printable)planView).print(g2D, pageFormat, page - this.furniturePageCount);
       if (pageExists == PAGE_EXISTS
           && !this.printablePages.contains(page)) {
         this.printablePages.add(page);
@@ -424,7 +430,9 @@ public class HomePrintableComponent extends JComponent implements Printable {
     }  
     pageFormat.setPaper(oldPaper);    
     return pageExists;
+
   }
+
 
   /**
    * Returns the preferred size of this component according to paper orientation and size
